@@ -165,9 +165,27 @@
 		}),
 		color: '#2c3e50'
 		}
-		}
+	}
 		
 	var circles = [];	
+	var count = 150;
+
+	var path = new Path.Star({
+		center: [0, 0],
+		points: 5,
+    	radius1: 5,
+    	radius2: 10,
+		fillColor: 'white',
+	});
+
+	var symbol = new Symbol(path);
+
+	for (var i = 0; i < count; i++) {
+		var center = Point.random() * view.size;
+		var placedSymbol = symbol.place(center);
+		placedSymbol.scale(i / count);
+	}
+
 
 	function onKeyDown(event) {
 		if(keyData[event.key]) {
@@ -182,6 +200,16 @@
 	}
 
 	function onFrame(event) {
+
+		for (var i = 0; i < count; i++) {
+				var item = project.activeLayer.children[i];
+				item.position.x += item.bounds.width / 20;
+
+				if (item.bounds.left > view.size.width) {
+					item.position.x = -item.bounds.width;
+				}
+		}
+
 		for(var i = 0; i < circles.length; i++) { 
 			circles[i].fillColor.hue += 1;
 			circles[i].scale(.9);
